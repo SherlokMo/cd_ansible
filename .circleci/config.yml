@@ -7,14 +7,14 @@ version: 2.1
 jobs:
   configure_infrastructure:
     docker:
-      - image: python:3.10-alpine
+      - image: python:3.7-alpine3.11
     steps:
       - checkout
       - add_ssh_keys:
           fingerprints: ["59:4d:43:92:d4:bd:bd:89:7f:ca:77:58:10:8b:c0:30"]
       - run: 
            name: Install ansible
-           command: apk add --update ansible
+           command: python -m pip install --user ansible
       - run: 
           name: Run playbook 
           command: ansible-playbook -i inventory main.yaml
