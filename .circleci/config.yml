@@ -14,7 +14,7 @@ jobs:
           fingerprints: ["59:4d:43:92:d4:bd:bd:89:7f:ca:77:58:10:8b:c0:30"]
       - run: 
            name: Install ansible
-           command: apk add --update ansible
+           command: python -m pip install --user ansible
       - run: 
           name: Run playbook 
           command: ansible-playbook -i inventory main.yaml
