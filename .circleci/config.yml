@@ -2,6 +2,14 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
+commands:
+  destroy_env: 
+    steps: 
+      - run: 
+          name: Destroy env
+          command: |
+            aws cloudformation delete-stack --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7}
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
@@ -29,24 +37,18 @@ jobs:
             command: |
               aws cloudformation deploy \
                 --template-file template.yaml \
-                --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
+                --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:7} \
                 --region us-east-1
 
   smoke_test:
     docker:
       - image: alpine:latest
     steps:
-      - run: apk add --update curl
       - run: 
           name: smoke test
-          command: |
-            URL="https://blog.udacity.com/"
-            if curl -s --head $URL
-            then
-              return 0
-            else
-              return 1
-            fi
+          command: return 1
+      - destroy_env
+        when: on_fail
       
 
 # Invoke jobs via workflows
@@ -54,6 +56,6 @@ jobs:
 workflows:
   my-workflow:
     jobs:
-      # - create_infrastructure
-      - configure_infrastructure
+      - create_infrastructure
+      # - configure_infrastructure
       - smoke_test
