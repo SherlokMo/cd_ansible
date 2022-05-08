@@ -47,8 +47,8 @@ jobs:
       - run: 
           name: smoke test
           command: return 1
-      - destroy_env
-        when: on_fail
+      - destroy_env:
+          when: on_fail
       
 
 # Invoke jobs via workflows
