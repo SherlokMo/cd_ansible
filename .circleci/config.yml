@@ -14,7 +14,8 @@ jobs:
           fingerprints: ["59:4d:43:92:d4:bd:bd:89:7f:ca:77:58:10:8b:c0:30"]
       - run: 
            name: Install ansible
-           command: apk add ansible
+           command: apk add --upgrade bash ansible openssh-client
+
            
       - run: 
           name: Run playbook 
